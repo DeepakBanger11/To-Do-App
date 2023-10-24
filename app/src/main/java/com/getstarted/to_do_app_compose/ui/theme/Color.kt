@@ -13,3 +13,8 @@ val Pink40 = Color(0xFF7D5260)
 val Background = Color(0xFF94719A)
 val HighlightedText = Color(0xFF0075FF)
 val BrandColorPrimary = Color(0xFF00549A)
+// color coding for task
+val LowPriorityColor = Color(0xFF00C980)
+val MediumPriorityColor = Color(0xFFFFC114)
+val HighPriorityColor = Color(0xFFFF4646)
+val NonePriorityColor = Color(0xFFFFFFFF)

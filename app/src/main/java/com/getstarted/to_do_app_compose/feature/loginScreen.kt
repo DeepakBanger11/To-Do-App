@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -53,6 +55,7 @@ fun loginScreen()
 {
     var email by remember{ mutableStateOf("")}
     var password by remember{ mutableStateOf("")}
+    val context = LocalContext.current
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
@@ -62,10 +65,132 @@ fun loginScreen()
     {
         item {
             headerForLogin()
-            inputForLogin(email,password)
+//            inputForLogin(email,password)
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .clip(
+                        shape = RoundedCornerShape(
+                            topStart = 40.dp,
+                            topEnd = 0.dp,
+                            bottomStart = 0.dp,
+                            bottomEnd = 40.dp
+                        )
+                    )
+                    .background(color = BrandColorPrimary)
+                    .height(350.dp)
+            ) {
+                Text(
+                    text = "Login Information",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .absolutePadding(30.dp, 0.dp, 0.dp, 20.dp),
+                    color = Color.White,
+                )
+                TextField(
+                    value = email, onValueChange = { email = it },
+                    label = { Text("Enter usersame") },
+                    modifier = Modifier
+//               .background(color = BrandColorPrimary)
+                        .clip(shape = RoundedCornerShape(7.dp))
+                )
+                TextButton(onClick = {  showToast(context, "coming soon!") }) {
+                    Text(
+                        text = "forgot Username?",
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .absolutePadding(45.dp, 0.dp, 0.dp, 0.dp),
+                        color = Color.White,
+                    )
+                }
+                Spacer(modifier = Modifier.size(20.dp))
+                TextField(
+                    value = password, onValueChange = { password = it },
+                    label = { Text("Enter Password") },
+                    modifier = Modifier
+                        .background(color = BrandColorPrimary)
+                        .clip(shape = RoundedCornerShape(7.dp)),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black
+                    )
+                )
+                TextButton(onClick = { showToast(context, "coming soon!")}) {
+                    Text(
+                        text = "forgot Password?",
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .absolutePadding(45.dp, 0.dp, 0.dp, 0.dp),
+                        color = Color.White,
+                    )
+                }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+
+                Button(
+                    onClick = {
+                        if (!validateRegData(email, password)) {
+                            showToast(
+                                context,
+                                "Registration unsuccessful. Please enter all data."
+                            )
+                            println(email)
+
+                        } else {
+//                    saveUserData(context, firstName, lastName, email)
+                            showToast(context, "Registration successful!")
+                            println(email)
+                            // Navigate to Home screen
+//                    navController.navigate(com.littlelemon.liitlelemon.Home.route)
+                        }
+                    },
+
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(BrandColorPrimary),
+
+                    ) {
+                    Text(text = "Login", style = TextStyle(fontWeight = FontWeight.Bold))
+                }
+            }
+        }
+        item {
+            Column (
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                TextButton(onClick = {
+                    showToast(context, "coming soon!")
+                }) {
+                    Text(
+                        text = "Don't have an account? Sign Up",
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        color = BrandColorPrimary,
+                    )
+                }
+            }
         }
     }
 }
+
 @Preview
 @Composable
 fun previewLoginScreen()
@@ -106,85 +231,87 @@ fun inputForLogin(email: String, password: String)
     var funEmail = email
     var funPassword = password
     val context = LocalContext.current
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp)
-            .clip(
-                shape = RoundedCornerShape(
-                    topStart = 40.dp,
-                    topEnd = 0.dp,
-                    bottomStart = 0.dp,
-                    bottomEnd = 40.dp
-                )
-            )
-            .background(color = BrandColorPrimary)
-            .height(250.dp)
-    ) {
-       TextField(
-           value = email, onValueChange ={ funEmail = it},
-           label= { Text( "Enter Email")},
-           modifier = Modifier
-               .background(color = BrandColorPrimary)
-               .clip(shape = RoundedCornerShape(7.dp))
-       )
-        Spacer(modifier = Modifier.size(30.dp))
-        TextField(
-            value = email, onValueChange ={ funPassword = it},
-            label= { Text("Enter Password")},
-            modifier = Modifier
-                .background(color = BrandColorPrimary)
-                .clip(shape = RoundedCornerShape(7.dp)),
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = Color.Black
-            )
-        )
-    }
-    Row (
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().padding(8.dp)
-    ){
-
-        Button(
-            onClick = {
-                if (!validateRegData(funEmail,funPassword)) {
-                    showToast(
-                        context,
-                        "Registration unsuccessful. Please enter all data."
-                    )
-                } else {
-//                    saveUserData(context, firstName, lastName, email)
-                    showToast(context, "Registration successful!")
-
-                    // Navigate to Home screen
-//                    navController.navigate(com.littlelemon.liitlelemon.Home.route)
-                }
-            },
-
-            modifier = Modifier
-                .height(50.dp)
-                .width(150.dp),
-            colors = ButtonDefaults.buttonColors(BrandColorPrimary),
-
-            ) {
-            Text(text = "Register", style = TextStyle(fontWeight = FontWeight.Bold))
-        }
-        Spacer(modifier = Modifier.size(20.dp))
-        Button(
-            onClick = {},
-
-            modifier = Modifier
-                .height(50.dp)
-                .width(150.dp),
-            colors = ButtonDefaults.buttonColors(BrandColorPrimary),
-
-            ) {
-            Text(text = "Sign Up", style = TextStyle(fontWeight = FontWeight.Bold))
-        }
-
-    }
+//    Column(
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(5.dp)
+//            .clip(
+//                shape = RoundedCornerShape(
+//                    topStart = 40.dp,
+//                    topEnd = 0.dp,
+//                    bottomStart = 0.dp,
+//                    bottomEnd = 40.dp
+//                )
+//            )
+//            .background(color = BrandColorPrimary)
+//            .height(250.dp)
+//    ) {
+//       TextField(
+//           value = email.value, onValueChange ={ email.value = it},
+//           label= { Text( "Enter Email")},
+//           modifier = Modifier
+////               .background(color = BrandColorPrimary)
+//               .clip(shape = RoundedCornerShape(7.dp))
+//       )
+//        Spacer(modifier = Modifier.size(30.dp))
+//        TextField(
+//            value = funPassword, onValueChange ={ funPassword = it},
+//            label= { Text("Enter Password")},
+//            modifier = Modifier
+//                .background(color = BrandColorPrimary)
+//                .clip(shape = RoundedCornerShape(7.dp)),
+//            colors = TextFieldDefaults.textFieldColors(
+//                textColor = Color.Black
+//            )
+//        )
+//    }
+//    Row (
+//        horizontalArrangement = Arrangement.SpaceBetween,
+//        modifier = Modifier.fillMaxWidth().padding(8.dp)
+//    ){
+//
+//        Button(
+//            onClick = {
+//                if (!validateRegData(funEmail,funPassword)) {
+//                    showToast(
+//                        context,
+//                        "Registration unsuccessful. Please enter all data."
+//                    )
+//                    println(funEmail)
+//
+//                } else {
+////                    saveUserData(context, firstName, lastName, email)
+//                    showToast(context, "Registration successful!")
+//                    println(funEmail)
+//                    // Navigate to Home screen
+////                    navController.navigate(com.littlelemon.liitlelemon.Home.route)
+//                }
+//            },
+//
+//            modifier = Modifier
+//                .height(50.dp)
+//                .width(150.dp),
+//            colors = ButtonDefaults.buttonColors(BrandColorPrimary),
+//
+//            ) {
+//            Text(text = "Login", style = TextStyle(fontWeight = FontWeight.Bold))
+//        }
+//        Spacer(modifier = Modifier.size(20.dp))
+//        Button(
+//            onClick = {},
+//
+//            modifier = Modifier
+//                .height(50.dp)
+//                .width(150.dp),
+//            colors = ButtonDefaults.buttonColors(BrandColorPrimary),
+//
+//            ) {
+//            Text(text = "Sign Up", style = TextStyle(fontWeight = FontWeight.Bold))
+//        }
+//
+//    }
     }
 
 

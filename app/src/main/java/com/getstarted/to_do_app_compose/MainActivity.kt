@@ -15,13 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.getstarted.to_do_app_compose.feature.loginScreen
 import com.getstarted.to_do_app_compose.ui.theme.ToDoAppComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ToDoAppComposeTheme {
-                loginScreen()
+//                loginScreen()
 
             }
         }
