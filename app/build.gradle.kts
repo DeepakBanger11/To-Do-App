@@ -65,15 +65,15 @@ dependencies {
 
     // Room components
     implementation("androidx.room:room-runtime:2.6.0")
-    kapt("androidx.room:room-compiler:2.4.3")
+    kapt("androidx.room:room-compiler:2.6.0")
     implementation("androidx.room:room-ktx:2.6.0")
 
     //DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.46")
+    kapt("com.google.dagger:hilt-compiler:2.46")
     //classpath ("com.google.dagger:hilt-android-gradle-plugin: 2.36")
 
     testImplementation("junit:junit:4.13.2")
@@ -83,6 +83,13 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Compose navigation
+    implementation("androidx.navigation:navigation-compose:2.7.4")
+
+//    //Status bar color
+//    implementation("com.google.accompanist:accompanist-systemuicontroller:x.y.z")
+
 
     //carouselle
     //implementation("io.coil-kt:coil-compose: 2.4.0")
