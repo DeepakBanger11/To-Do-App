@@ -4,4 +4,10 @@
     <string name="serach_button">Search Tasks</string>
     <string name="sort_button">Sort Tasks</string>
     <string name="Delete_all_action">Delete All</string>
+    <string name="search_placeholder">Search</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="close_icon">Close Icon</string>
+    <string name="list_screen_title">Task</string>
+    <string name="sad_face_icon">Sad Face Icon</string>
+    <string name="no_task_found">No Task Found</string>
 </resources>

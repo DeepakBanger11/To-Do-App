@@ -16,16 +16,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -44,14 +40,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.getstarted.to_do_app_compose.helper.validateRegData
-import com.getstarted.to_do_app_compose.ui.theme.Background
 import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import com.getstarted.to_do_app_compose.util.Action
 
 @ExperimentalMaterial3Api
 @Composable
-fun loginScreen()
+fun loginScreen(
+    navigateToListScreen: (Action) -> Unit
+)
 {
     var email by remember{ mutableStateOf("")}
     var password by remember{ mutableStateOf("")}
@@ -96,7 +94,7 @@ fun loginScreen()
                 )
                 TextField(
                     value = email, onValueChange = { email = it },
-                    label = { Text("Enter usersame") },
+                    label = { Text("Enter username") },
                     modifier = Modifier
 //               .background(color = BrandColorPrimary)
                         .clip(shape = RoundedCornerShape(7.dp))
@@ -148,14 +146,13 @@ fun loginScreen()
                                 context,
                                 "Registration unsuccessful. Please enter all data."
                             )
-                            println(email)
-
+                            navigateToListScreen(Action.NO_ACTION)
                         } else {
 //                    saveUserData(context, firstName, lastName, email)
                             showToast(context, "Registration successful!")
                             println(email)
                             // Navigate to Home screen
-//                    navController.navigate(com.littlelemon.liitlelemon.Home.route)
+//
                         }
                     },
 
@@ -196,7 +193,7 @@ fun loginScreen()
 @Composable
 fun previewLoginScreen()
 {
-    loginScreen()
+    loginScreen {}
 }
 @Composable
 fun headerForLogin()
