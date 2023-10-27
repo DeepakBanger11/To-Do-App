@@ -29,7 +29,8 @@ fun SetUpNavigation(
             navigateToTaskScreen = screen.task,
             sharedViewModal = sharedViewModal
         )
-        taskComposable(navigateToListScreen = screen.list)
+        taskComposable(sharedViewModal = sharedViewModal,
+            navigateToListScreen = screen.list)
         loginComposable(navigateToListScreen = screen.list)
     }
 }

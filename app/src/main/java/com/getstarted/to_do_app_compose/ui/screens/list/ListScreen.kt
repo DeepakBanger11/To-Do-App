@@ -49,7 +49,8 @@ fun ListScreen(
                          searchTextState = searchTextState
                      )
             },
-            content = { ListContent(
+            content = {
+                ListContent(
                 tasks = allTasks,
                 navigateToTaskScreen = navigateToTaskScreen
             )},
