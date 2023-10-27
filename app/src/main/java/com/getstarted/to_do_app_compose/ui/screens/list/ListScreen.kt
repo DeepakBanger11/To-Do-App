@@ -24,7 +24,7 @@ import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
 import com.getstarted.to_do_app_compose.util.SearchAppBarState
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
     navigateToTaskScreen:(taskId:Int) -> Unit,
@@ -39,7 +39,6 @@ fun ListScreen(
 //    for (task in allTasks.value){
 //        Log.d("ListScreen",task.title)
 //    }
-
     val searchAppBarState:SearchAppBarState by sharedViewModal.searchAppBarState
     val searchTextState:String by sharedViewModal.searchTextState
         Scaffold(
@@ -71,7 +70,7 @@ fun ListFab(
             tint = Color.White,
             modifier = Modifier.background(BrandColorPrimary)
         )
-
+        
     }
 }
 //@Composable
