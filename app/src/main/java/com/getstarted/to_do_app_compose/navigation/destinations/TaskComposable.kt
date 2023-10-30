@@ -1,7 +1,7 @@
 package com.getstarted.to_do_app_compose.navigation.destinations
 
 
-import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
@@ -27,8 +27,13 @@ fun NavGraphBuilder.taskComposable(
         val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY,0)
         sharedViewModal.getSelectedTask(taskId = taskId)
         val selectedTask by sharedViewModal.selectedTask.collectAsState()
-        
-        TaskScreen(selectedTask=selectedTask,
-            navigateToListScreen = navigateToListScreen)
+        LaunchedEffect(key1 = taskId){
+            sharedViewModal.updateTaskField(selectedTask =selectedTask)
+        }
+        TaskScreen(
+            selectedTask = selectedTask,
+            sharedViewModel = sharedViewModal,
+            navigateToListScreen = navigateToListScreen
+        )
     }
 }

@@ -88,7 +88,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.4")
 
 //    //Status bar color
-//    implementation("com.google.accompanist:accompanist-systemuicontroller:x.y.z")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+
 
 
     //carouselle

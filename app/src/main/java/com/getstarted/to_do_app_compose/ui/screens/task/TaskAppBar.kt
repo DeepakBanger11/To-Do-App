@@ -1,6 +1,6 @@
 package com.getstarted.to_do_app_compose.ui.screens.task
 
-import android.util.Log
+
 import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -30,10 +31,9 @@ fun TaskAppBar(
     selectedTask: ToDoTask?,
     navigateToListScreen: (Action) -> Unit
 ) {
-    if (selectedTask == null){
+    if (selectedTask == null) {
         NewTaskAppBar(navigateToListScreen = navigateToListScreen)
-    }
-    else{
+    } else {
         ExistingTaskAppBar(navigateToListScreen = navigateToListScreen, selectedTask = selectedTask)
     }
 }
@@ -41,17 +41,19 @@ fun TaskAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewTaskAppBar(
-    navigateToListScreen:(Action) -> Unit
-){
+    navigateToListScreen: (Action) -> Unit
+) {
     TopAppBar(title = {
-        Text(text = stringResource(id = R.string.add_task),
-            color = Color.White)
+        Text(
+            text = stringResource(id = R.string.add_task),
+            color = Color.White
+        )
     },
         navigationIcon = {
             BackAction(onBackClicked = navigateToListScreen)
         },
-        modifier = Modifier.background(BrandColorPrimary),
-        colors = TopAppBarDefaults.smallTopAppBarColors(BrandColorPrimary),
+        modifier = Modifier.background(MaterialTheme.colorScheme.primary),
+        colors = TopAppBarDefaults.smallTopAppBarColors(MaterialTheme.colorScheme.primary),
         actions = {
             AddAction(onAddClicked = navigateToListScreen)
         }
@@ -87,28 +89,29 @@ fun AddAction(
 
 @Composable
 @Preview
-fun NewTaskAppBarPreview()
-{
+fun NewTaskAppBarPreview() {
     NewTaskAppBar(navigateToListScreen = {})
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExistingTaskAppBar(
-    navigateToListScreen:(Action) -> Unit,
+    navigateToListScreen: (Action) -> Unit,
     selectedTask: ToDoTask
-){
+) {
     TopAppBar(title = {
-        Text(text = selectedTask.title,
+        Text(
+            text = selectedTask.title,
             color = Color.White,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis)
+            overflow = TextOverflow.Ellipsis,
+        )
     },
         navigationIcon = {
-                         CloseAction(onCloseClicked = navigateToListScreen)
+            CloseAction(onCloseClicked = navigateToListScreen)
         },
-        modifier = Modifier.background(BrandColorPrimary),
-        colors = TopAppBarDefaults.smallTopAppBarColors(BrandColorPrimary),
+        modifier = Modifier.background(MaterialTheme.colorScheme.primary),
+        colors = TopAppBarDefaults.smallTopAppBarColors(MaterialTheme.colorScheme.primary),
         actions = {
             DeleteAction(onDeleteClicked = navigateToListScreen)
             UpdateAction(onUpdateClicked = navigateToListScreen)
@@ -129,6 +132,7 @@ fun CloseAction(
         )
     }
 }
+
 @Composable
 fun DeleteAction(
     onDeleteClicked: (Action) -> Unit
@@ -141,6 +145,7 @@ fun DeleteAction(
         )
     }
 }
+
 @Composable
 fun UpdateAction(
     onUpdateClicked: (Action) -> Unit
@@ -153,15 +158,16 @@ fun UpdateAction(
         )
     }
 }
+
 @Composable
 @Preview
-fun ExistingTaskAppBarPreview()
-{
-    ExistingTaskAppBar(navigateToListScreen = {}, selectedTask = ToDoTask(
-        id = 0,
-        title = "Batgirl",
-        description = "super hero , dcu , works along with batman",
-        priority = Priority.MEDIUM
-    )
+fun ExistingTaskAppBarPreview() {
+    ExistingTaskAppBar(
+        navigateToListScreen = {}, selectedTask = ToDoTask(
+            id = 0,
+            title = "Batgirl",
+            description = "super hero , dcu , works along with batman",
+            priority = Priority.MEDIUM
+        )
     )
 }

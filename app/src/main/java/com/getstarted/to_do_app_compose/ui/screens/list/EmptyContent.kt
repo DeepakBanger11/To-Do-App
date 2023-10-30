@@ -35,7 +35,8 @@ fun EmptyContent() {
             ),
             modifier = Modifier.size(120.dp)
         )
-        Text(text = stringResource(id = R.string.no_task_found),
+        Text(
+            text = stringResource(id = R.string.no_task_found),
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp
@@ -47,7 +48,6 @@ fun EmptyContent() {
 
 @Composable
 @Preview
-fun EmptyContentPreview()
-{
+fun EmptyContentPreview() {
     EmptyContent()
 }

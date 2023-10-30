@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.getstarted.to_do_app_compose.dataClasses.Priority
 import com.getstarted.to_do_app_compose.dataClasses.ToDoTask
 import com.getstarted.to_do_app_compose.repositories.ToDoRepository
 import com.getstarted.to_do_app_compose.util.RequestState
@@ -11,6 +12,7 @@ import com.getstarted.to_do_app_compose.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
@@ -23,16 +25,21 @@ class SharedViewModal @Inject constructor(
     private val respository: ToDoRepository
 ) : ViewModel() {
 
+    val id: MutableState<Int> = mutableStateOf(0)
+    val title: MutableState<String> = mutableStateOf("")
+    val description: MutableState<String> = mutableStateOf("")
+    val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
+
     // this is to keep searchAppBarSate Closed when we open up
-     val searchAppBarState: MutableState<SearchAppBarState> =
+    val searchAppBarState: MutableState<SearchAppBarState> =
         mutableStateOf(SearchAppBarState.CLOSED)
 
     //this is set search text
-     val searchTextState: MutableState<String> = mutableStateOf("")
+    val searchTextState: MutableState<String> = mutableStateOf("")
 
     private val _allTasks =
         MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
-    val allTasks: StateFlow<RequestState<List<ToDoTask>>> = _allTasks
+    val allTasks: StateFlow<RequestState<List<ToDoTask>>> = _allTasks.asStateFlow()
     fun getAllTasks() {
         _allTasks.value = RequestState.Loading
         try {
@@ -41,18 +48,32 @@ class SharedViewModal @Inject constructor(
                     _allTasks.value = RequestState.Success(it)
                 }
             }
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             _allTasks.value = RequestState.Error(e)
         }
     }
-    private  val _selectedTask: MutableStateFlow<ToDoTask?> = MutableStateFlow(null)
-    val selectedTask:StateFlow<ToDoTask?> = _selectedTask
-    fun getSelectedTask(taskId:Int){
+
+    private val _selectedTask: MutableStateFlow<ToDoTask?> = MutableStateFlow(null)
+    val selectedTask: StateFlow<ToDoTask?> = _selectedTask
+    fun getSelectedTask(taskId: Int) {
         viewModelScope.launch {
-            respository.getSelectedTask(taskId = taskId).collect{ task->
+            respository.getSelectedTask(taskId = taskId).collect { task ->
                 _selectedTask.value = task
             }
+        }
+    }
+    fun updateTaskField(selectedTask:ToDoTask?){
+        if (selectedTask != null){
+            id.value = selectedTask.id
+            title.value = selectedTask.title
+            description.value = selectedTask.description
+            priority.value = selectedTask.priority
+        }
+        else{
+            id.value = 0
+            title.value = ""
+            description.value = ""
+            priority.value = Priority.LOW
         }
     }
 }

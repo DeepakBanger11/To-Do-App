@@ -6,7 +6,7 @@
 
 package com.getstarted.to_do_app_compose.ui.screens.list
 
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,18 +17,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarDefaults.containerColor
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -50,12 +47,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.getstarted.to_do_app_compose.feature.PriorityItem
-import com.getstarted.to_do_app_compose.ui.theme.Background
 import com.getstarted.to_do_app_compose.ui.theme.LARGE_PADDING
 import com.getstarted.to_do_app_compose.ui.theme.TOP_APP_BAR_HEIGHT
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
 import com.getstarted.to_do_app_compose.util.SearchAppBarState
-import com.getstarted.to_do_app_compose.util.TrailingIconsState
 
 
 @Composable
@@ -99,9 +94,14 @@ fun DefaultListAppBar(
     onDeleteClicked: () -> Unit,
 ) {
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.list_screen_title), color = Color.White) },
+        title = {
+            Text(
+                text = stringResource(id = R.string.list_screen_title),
+                color = Color.White
+            )
+        },
         colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = BrandColorPrimary,
+            containerColor = MaterialTheme.colorScheme.primary,
         ),
         actions = {
             ListAppBarActions(
@@ -248,7 +248,7 @@ fun SearchAppBar(
             .height(TOP_APP_BAR_HEIGHT),
         shadowElevation = 4.dp,
         tonalElevation = 4.dp,
-        color = BrandColorPrimary
+        color = MaterialTheme.colorScheme.primary
     )
     {
         TextField(
@@ -327,7 +327,7 @@ fun SearchAppBar(
                     onSearchClicked(text)
                 }
             ),
-                colors = TextFieldDefaults.textFieldColors(
+            colors = TextFieldDefaults.textFieldColors(
                 cursorColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,

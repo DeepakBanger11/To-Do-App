@@ -1,5 +1,8 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
+@file:OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
 )
 
 package com.getstarted.to_do_app_compose.feature
@@ -20,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -49,18 +53,16 @@ import com.getstarted.to_do_app_compose.util.Action
 @Composable
 fun loginScreen(
     navigateToListScreen: (Action) -> Unit
-)
-{
-    var email by remember{ mutableStateOf("")}
-    var password by remember{ mutableStateOf("")}
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     val context = LocalContext.current
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    )
-    {
+    ) {
         item {
             headerForLogin()
 //            inputForLogin(email,password)
@@ -72,20 +74,16 @@ fun loginScreen(
                     .padding(5.dp)
                     .clip(
                         shape = RoundedCornerShape(
-                            topStart = 40.dp,
-                            topEnd = 0.dp,
-                            bottomStart = 0.dp,
-                            bottomEnd = 40.dp
+                            topStart = 40.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 40.dp
                         )
                     )
-                    .background(color = BrandColorPrimary)
+                    .background(MaterialTheme.colorScheme.primary)
                     .height(350.dp)
             ) {
                 Text(
                     text = "Login Information",
                     style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        fontWeight = FontWeight.Bold, fontSize = 20.sp
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -93,13 +91,14 @@ fun loginScreen(
                     color = Color.White,
                 )
                 TextField(
-                    value = email, onValueChange = { email = it },
+                    value = email,
+                    onValueChange = { email = it },
                     label = { Text("Enter username") },
                     modifier = Modifier
 //               .background(color = BrandColorPrimary)
                         .clip(shape = RoundedCornerShape(7.dp))
                 )
-                TextButton(onClick = {  showToast(context, "coming soon!") }) {
+                TextButton(onClick = { showToast(context, "coming soon!") }) {
                     Text(
                         text = "forgot Username?",
                         fontSize = 15.sp,
@@ -111,7 +110,8 @@ fun loginScreen(
                 }
                 Spacer(modifier = Modifier.size(20.dp))
                 TextField(
-                    value = password, onValueChange = { password = it },
+                    value = password,
+                    onValueChange = { password = it },
                     label = { Text("Enter Password") },
                     modifier = Modifier
                         .background(color = BrandColorPrimary)
@@ -120,7 +120,7 @@ fun loginScreen(
                         textColor = Color.Black
                     )
                 )
-                TextButton(onClick = { showToast(context, "coming soon!")}) {
+                TextButton(onClick = { showToast(context, "coming soon!") }) {
                     Text(
                         text = "forgot Password?",
                         fontSize = 15.sp,
@@ -143,8 +143,7 @@ fun loginScreen(
                     onClick = {
                         if (!validateRegData(email, password)) {
                             showToast(
-                                context,
-                                "Registration unsuccessful. Please enter all data."
+                                context, "Registration unsuccessful. Please enter all data."
                             )
                             navigateToListScreen(Action.NO_ACTION)
                         } else {
@@ -159,7 +158,7 @@ fun loginScreen(
                     modifier = Modifier
                         .height(50.dp)
                         .fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(BrandColorPrimary),
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
 
                     ) {
                     Text(text = "Login", style = TextStyle(fontWeight = FontWeight.Bold))
@@ -167,19 +166,18 @@ fun loginScreen(
             }
         }
         item {
-            Column (
+            Column(
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
-            ){
+            ) {
                 TextButton(onClick = {
                     showToast(context, "coming soon!")
                 }) {
                     Text(
                         text = "Don't have an account? Sign Up",
                         fontSize = 15.sp,
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         color = BrandColorPrimary,
                     )
                 }
@@ -191,41 +189,42 @@ fun loginScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun previewLoginScreen()
-{
+fun previewLoginScreen() {
     loginScreen {}
 }
-@Composable
-fun headerForLogin()
-{
-   Column(
-       verticalArrangement = Arrangement.Center,
-       horizontalAlignment = Alignment.CenterHorizontally,
-       modifier = Modifier
-           .fillMaxWidth()
-           .padding(10.dp)
-   ) {
-       Text(text = "To Do",
-           modifier = Modifier
-               .height(130.dp)
-               .padding(20.dp),
-           style = MaterialTheme.typography.headlineLarge,
-           color = BrandColorPrimary,
-           fontSize = 60.sp,
-           fontWeight = FontWeight.Bold
-       )
-       Text(text = "Perfection is only a list away !",
-           style = MaterialTheme.typography.headlineMedium,
-           color = BrandColorPrimary,
-           fontSize = 20.sp,
-       )
 
-   }
+@Composable
+fun headerForLogin() {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+    ) {
+        Text(
+            text = "To Do",
+            modifier = Modifier
+                .height(130.dp)
+                .padding(20.dp),
+            style = MaterialTheme.typography.headlineLarge,
+            color = BrandColorPrimary,
+            fontSize = 60.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "Perfection is only a list away !",
+            style = MaterialTheme.typography.headlineMedium,
+            color = BrandColorPrimary,
+            fontSize = 20.sp,
+        )
+
+    }
 }
+
 @ExperimentalMaterial3Api
 @Composable
-fun inputForLogin(email: String, password: String)
-{
+fun inputForLogin(email: String, password: String) {
     var funEmail = email
     var funPassword = password
     val context = LocalContext.current
@@ -310,9 +309,9 @@ fun inputForLogin(email: String, password: String)
 //        }
 //
 //    }
-    }
+}
 
 
-private fun showToast(context:Context, message: String) {
+private fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

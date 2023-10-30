@@ -10,14 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.getstarted.to_do_app_compose.dataClasses.Priority
 import com.getstarted.to_do_app_compose.ui.theme.LARGE_PADDING
 import com.getstarted.to_do_app_compose.ui.theme.PRIORITY_INDICATOR_SIZE
 
 @Composable
-fun PriorityItem(priority: Priority)
-{
+fun PriorityItem(priority: Priority) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     )
@@ -26,17 +24,17 @@ fun PriorityItem(priority: Priority)
         {
             drawCircle(color = priority.color)
         }
-        Text(   text = priority.name,
-                modifier = Modifier.padding(LARGE_PADDING),
+        Text(
+            text = priority.name,
+            modifier = Modifier.padding(LARGE_PADDING),
 //              style = Typography.section,
-                color = Color.Black
+            color = Color.Black
         )
     }
 }
 
 @Composable
 @Preview
-fun PriorityItemsPreview()
-{
+fun PriorityItemsPreview() {
     PriorityItem(priority = Priority.HIGH)
 }

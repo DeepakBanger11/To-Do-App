@@ -28,7 +28,7 @@ object DatabaseModule {
 //    The component implementation will pass dependencies to the method as parameters
 
     fun provideDatabase(
-        @ApplicationContext context:Context
+        @ApplicationContext context: Context
     ) = Room.databaseBuilder(
         context,
         ToDoDatabase::class.java,

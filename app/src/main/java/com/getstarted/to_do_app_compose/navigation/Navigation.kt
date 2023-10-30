@@ -9,7 +9,6 @@ import com.getstarted.to_do_app_compose.navigation.destinations.listComposable
 import com.getstarted.to_do_app_compose.navigation.destinations.loginComposable
 import com.getstarted.to_do_app_compose.navigation.destinations.taskComposable
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
-import com.getstarted.to_do_app_compose.util.Constants.LIST_SCREEN
 import com.getstarted.to_do_app_compose.util.Constants.LOGIN_SCREEN
 
 @Composable
@@ -29,8 +28,10 @@ fun SetUpNavigation(
             navigateToTaskScreen = screen.task,
             sharedViewModal = sharedViewModal
         )
-        taskComposable(sharedViewModal = sharedViewModal,
-            navigateToListScreen = screen.list)
+        taskComposable(
+            sharedViewModal = sharedViewModal,
+            navigateToListScreen = screen.list
+        )
         loginComposable(navigateToListScreen = screen.list)
     }
 }

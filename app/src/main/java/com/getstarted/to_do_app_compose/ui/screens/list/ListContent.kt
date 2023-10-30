@@ -5,7 +5,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,9 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.getstarted.to_do_app_compose.R
 import com.getstarted.to_do_app_compose.dataClasses.Priority
 import com.getstarted.to_do_app_compose.dataClasses.ToDoTask
-import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
 import com.getstarted.to_do_app_compose.ui.theme.LARGE_PADDING
-import com.getstarted.to_do_app_compose.ui.theme.MEDIUM_PADDING
 import com.getstarted.to_do_app_compose.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.getstarted.to_do_app_compose.util.RequestState
 
@@ -41,14 +38,13 @@ fun ListContent(
     tasks: RequestState<List<ToDoTask>>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-   if (tasks is RequestState.Success)
-   {
-       if (tasks.data.isEmpty()) {
-           EmptyContent()
-       } else {
-           DisplayTasks(tasks = tasks.data, navigateToTaskScreen = navigateToTaskScreen)
-       }
-   }
+    if (tasks is RequestState.Success) {
+        if (tasks.data.isEmpty()) {
+            EmptyContent()
+        } else {
+            DisplayTasks(tasks = tasks.data, navigateToTaskScreen = navigateToTaskScreen)
+        }
+    }
 }
 
 @Composable
