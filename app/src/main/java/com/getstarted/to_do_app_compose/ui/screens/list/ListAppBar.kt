@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
 import com.getstarted.to_do_app_compose.R
 import com.getstarted.to_do_app_compose.dataClasses.Priority
 import androidx.compose.runtime.getValue
@@ -50,6 +49,7 @@ import com.getstarted.to_do_app_compose.feature.PriorityItem
 import com.getstarted.to_do_app_compose.ui.theme.LARGE_PADDING
 import com.getstarted.to_do_app_compose.ui.theme.TOP_APP_BAR_HEIGHT
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
+import com.getstarted.to_do_app_compose.util.Action
 import com.getstarted.to_do_app_compose.util.SearchAppBarState
 
 
@@ -66,7 +66,9 @@ fun ListAppBar(
                     sharedViewModal.searchAppBarState.value = SearchAppBarState.OPENED
                 },
                 onSortClicked = {},
-                onDeleteClicked = {}
+                onDeleteAllClicked = {
+                    sharedViewModal.action.value = Action.DELETE_ALL
+                }
             )
         }
 
@@ -79,7 +81,9 @@ fun ListAppBar(
                     sharedViewModal.searchAppBarState.value = SearchAppBarState.CLOSED
                     sharedViewModal.searchTextState.value = ""
                 },
-                onSearchClicked = {})
+                onSearchClicked = {
+                    sharedViewModal.searchDatabase(searchQuery = it)
+                })
         }
     }
 
@@ -91,7 +95,7 @@ fun ListAppBar(
 fun DefaultListAppBar(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit,
+    onDeleteAllClicked: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -107,7 +111,7 @@ fun DefaultListAppBar(
             ListAppBarActions(
                 onSearchClicked = onSearchClicked,
                 onSortClicked = onSortClicked,
-                onDeleteClicked = onDeleteClicked
+                onDeleteAllClicked = onDeleteAllClicked
             )
         }
 
@@ -178,11 +182,11 @@ fun SortAction(
 fun ListAppBarActions(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit
+    onDeleteAllClicked: () -> Unit
 ) {
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
-    DeleteAllAction(onDeleteClicked = onDeleteClicked)
+    DeleteAllAction(onDeleteAllClicked = onDeleteAllClicked)
 }
 
 @Composable
@@ -200,7 +204,7 @@ fun SearchAction(
 
 @Composable
 fun DeleteAllAction(
-    onDeleteClicked: () -> Unit
+    onDeleteAllClicked: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     IconButton(onClick = { expanded = true }) {
@@ -224,7 +228,7 @@ fun DeleteAllAction(
                 },
                 onClick = {
                     expanded = false
-                    onDeleteClicked()
+                    onDeleteAllClicked()
                 }
             )
         }
@@ -344,7 +348,7 @@ private fun DefaultListAppBarPreview() {
     DefaultListAppBar(
         onSearchClicked = {},
         onSortClicked = {},
-        onDeleteClicked = {}
+        onDeleteAllClicked = {}
     )
 }
 

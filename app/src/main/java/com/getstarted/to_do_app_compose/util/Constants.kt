@@ -9,7 +9,10 @@ object Constants {
     const val LIST_ARGUMENT_KEY = "action"
     const val TASK_ARGUMENT_KEY = "taskId"
 
-    // navigating to login screen
+    // navigating  login screen
     const val LOGIN_SCREEN = "login/{next}"
     const val LOGIN_ARGUMENT_KEY = "next"
+
+    // max lenght for title
+    const val MAX_TITLE_LENGTH = 20
 }
