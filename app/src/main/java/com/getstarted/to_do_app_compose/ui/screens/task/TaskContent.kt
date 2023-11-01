@@ -72,7 +72,7 @@ fun TaskContent(
             modifier = Modifier
                 .fillMaxSize(),
             textStyle = MaterialTheme.typography.bodyMedium,
-            singleLine = true
+//            singleLine = true
         )
     }
 }

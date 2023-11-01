@@ -97,6 +97,7 @@ fun loginScreen(
                     modifier = Modifier
 //               .background(color = BrandColorPrimary)
                         .clip(shape = RoundedCornerShape(7.dp))
+
                 )
                 TextButton(onClick = { showToast(context, "coming soon!") }) {
                     Text(

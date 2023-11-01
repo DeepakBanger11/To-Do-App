@@ -39,12 +39,16 @@ fun ListScreen(
     LaunchedEffect(key1 = true) {
         Log.d("ListScreen", "LaunchEffect Triggered!")
         sharedViewModal.getAllTasks()
+        sharedViewModal.readSortState()
     }
     val action by sharedViewModal.action
 
     //this collect all tasks in data base and also update it whenever there is change in database
     val allTasks by sharedViewModal.allTasks.collectAsState()
     val searchTasks by sharedViewModal.searchedTasks.collectAsState()
+    val sortState by sharedViewModal.sortState.collectAsState()
+    val lowPriorityTasks by sharedViewModal.lowPriorityTasks.collectAsState()
+    val highPriorityTasks by sharedViewModal.highPriorityTasks.collectAsState()
 //    for (task in allTasks.value){
 //        Log.d("ListScreen",task.title)
 //    }
@@ -56,7 +60,7 @@ fun ListScreen(
     DisplaySnackBar(
         scaffoldState = scaffoldState,
         handleDatabaseActions = { sharedViewModal.handleDatabaseActions(action = action) },
-        onUndoClicked ={
+        onUndoClicked = {
             sharedViewModal.action.value = it
         },
         taskTitle = sharedViewModal.title.value,
@@ -76,6 +80,9 @@ fun ListScreen(
             ListContent(
                 allTasks = allTasks,
                 searchTasks = searchTasks,
+                lowPriorityTasks = lowPriorityTasks,
+                highPriorityTasks = highPriorityTasks,
+                sortState = sortState,
                 searchAppBarState = searchAppBarState,
                 navigateToTaskScreen = navigateToTaskScreen
             )
@@ -122,7 +129,7 @@ fun DisplaySnackBar(
                     actionLabel = setActionLabel(action = action)
                 )
                 undoDeletedTask(
-                    action =action,
+                    action = action,
                     snackBarResult = snackBarResult,
                     onUndoClicked = onUndoClicked
                 )
@@ -131,28 +138,29 @@ fun DisplaySnackBar(
     }
 }
 
-private fun setMessage(action: Action,taskTitle: String):String{
-    return when(action){
+private fun setMessage(action: Action, taskTitle: String): String {
+    return when (action) {
         Action.DELETE_ALL -> "All Tasks Removed."
         else -> "${action.name} : $taskTitle"
     }
 }
-private fun setActionLabel(action: Action):String{
-    return if (action.name == "DELETE"){
+
+private fun setActionLabel(action: Action): String {
+    return if (action.name == "DELETE") {
         "UNDO"
-    }else{
+    } else {
         "OK"
     }
 }
 
-private  fun undoDeletedTask(
+private fun undoDeletedTask(
     action: Action,
     snackBarResult: SnackbarResult,
-    onUndoClicked:(Action) -> Unit
-){
+    onUndoClicked: (Action) -> Unit
+) {
     if (snackBarResult == SnackbarResult.ActionPerformed
         && action == Action.DELETE
-        ){
+    ) {
         onUndoClicked(Action.UNDO)
     }
 }

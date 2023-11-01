@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.getstarted.to_do_app_compose.dataClasses.Priority
 import com.getstarted.to_do_app_compose.dataClasses.ToDoTask
+import com.getstarted.to_do_app_compose.repositories.DataStoreRepository
 import com.getstarted.to_do_app_compose.repositories.ToDoRepository
 import com.getstarted.to_do_app_compose.util.Action
 import com.getstarted.to_do_app_compose.util.Constants.MAX_TITLE_LENGTH
@@ -14,8 +15,11 @@ import com.getstarted.to_do_app_compose.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
@@ -25,7 +29,8 @@ import javax.inject.Inject
 // and can be retrieved by default in an Activity or Fragment annotated with AndroidEntryPoint.
 // The HiltViewModel containing a constructor annotated with Inject will have its dependencies defined in the constructor parameters injected by Dagger's Hilt.
 class SharedViewModal @Inject constructor(
-    private val respository: ToDoRepository
+    private val repository: ToDoRepository,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
     val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
@@ -50,11 +55,12 @@ class SharedViewModal @Inject constructor(
         MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
     val allTasks: StateFlow<RequestState<List<ToDoTask>>> = _allTasks.asStateFlow()
 
+
     fun searchDatabase(searchQuery: String) {
         _searchedTasks.value = RequestState.Loading
         try {
             viewModelScope.launch {
-                respository.searchDatabase(searchQuery = "%$searchQuery%")
+                repository.searchDatabase(searchQuery = "%$searchQuery%")
                     .collect { searchedTasks ->
                         _searchedTasks.value = RequestState.Success(searchedTasks)
                     }
@@ -65,11 +71,46 @@ class SharedViewModal @Inject constructor(
         searchAppBarState.value = SearchAppBarState.TRIGGERED
     }
 
+    val lowPriorityTasks: StateFlow<List<ToDoTask>> =
+        repository.sortByLowPriority.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
+        )
+
+    val highPriorityTasks: StateFlow<List<ToDoTask>> =
+        repository.sortByHighPriority.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
+        )
+    private val _sortState =
+        MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
+    val sortState: StateFlow<RequestState<Priority>> = _sortState
+    fun readSortState(){
+        _sortState .value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                dataStoreRepository.readSortState
+                    .map { Priority.valueOf(it) }
+                    .collect {
+                        _sortState .value = RequestState.Success(it)
+                }
+            }
+        } catch (e: Exception) {
+            _sortState .value = RequestState.Error(e)
+        }
+    }
+    fun persistSortingState(priority: Priority){
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.persistSortState(priority =priority)
+        }
+    }
     fun getAllTasks() {
         _allTasks.value = RequestState.Loading
         try {
             viewModelScope.launch {
-                respository.getAllTask.collect {
+                repository.getAllTask.collect {
                     _allTasks.value = RequestState.Success(it)
                 }
             }
@@ -82,7 +123,7 @@ class SharedViewModal @Inject constructor(
     val selectedTask: StateFlow<ToDoTask?> = _selectedTask
     fun getSelectedTask(taskId: Int) {
         viewModelScope.launch {
-            respository.getSelectedTask(taskId = taskId).collect { task ->
+            repository.getSelectedTask(taskId = taskId).collect { task ->
                 _selectedTask.value = task
             }
         }
@@ -95,7 +136,7 @@ class SharedViewModal @Inject constructor(
                 description = description.value,
                 priority = priority.value
             )
-            respository.addTask(toDoTask = toDoTask)
+            repository.addTask(toDoTask = toDoTask)
         }
         searchAppBarState.value = SearchAppBarState.CLOSED
     }
@@ -108,7 +149,7 @@ class SharedViewModal @Inject constructor(
                 description = description.value,
                 priority = priority.value
             )
-            respository.updateTask(toDoTask = toDoTask)
+            repository.updateTask(toDoTask = toDoTask)
         }
     }
 
@@ -120,13 +161,13 @@ class SharedViewModal @Inject constructor(
                 description = description.value,
                 priority = priority.value
             )
-            respository.deleteTask(toDoTask = toDoTask)
+            repository.deleteTask(toDoTask = toDoTask)
         }
     }
 
     private fun deleteAllTask() {
         viewModelScope.launch(Dispatchers.IO) {
-            respository.deleteAllTasks()
+            repository.deleteAllTasks()
         }
     }
 

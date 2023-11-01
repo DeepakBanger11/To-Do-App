@@ -95,6 +95,7 @@ dependencies {
     //carouselle
     //implementation("io.coil-kt:coil-compose: 2.4.0")
 
+
 }
 //allows reference to generated code
 kapt {
