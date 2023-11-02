@@ -51,17 +51,16 @@ android {
         }
     }
 }
-
 dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.05.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3-android:1.2.0-alpha03")
 
     // Room components
     implementation("androidx.room:room-runtime:2.6.0")
@@ -88,13 +87,11 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.4")
 
 //    //Status bar color
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
-
+//    implementation("com.google.accompanist:accompanist-systemuicontroller:x.y.z")
 
 
     //carouselle
     //implementation("io.coil-kt:coil-compose: 2.4.0")
-
 
 }
 //allows reference to generated code

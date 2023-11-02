@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+
 
 package com.getstarted.to_do_app_compose.ui.screens.list
 
@@ -84,6 +84,10 @@ fun ListScreen(
                 highPriorityTasks = highPriorityTasks,
                 sortState = sortState,
                 searchAppBarState = searchAppBarState,
+                onSwipeToDelete ={ action,task ->
+                    sharedViewModal.action.value = action
+                    sharedViewModal.updateTaskField(selectedTask = task)
+                },
                 navigateToTaskScreen = navigateToTaskScreen
             )
         },

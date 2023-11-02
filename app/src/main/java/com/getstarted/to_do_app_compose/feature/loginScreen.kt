@@ -117,9 +117,8 @@ fun loginScreen(
                     modifier = Modifier
                         .background(color = BrandColorPrimary)
                         .clip(shape = RoundedCornerShape(7.dp)),
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = Color.Black
-                    )
+//                    colors = TextFieldDefaults.te(
+//                        textColor = Color.Black)
                 )
                 TextButton(onClick = { showToast(context, "coming soon!") }) {
                     Text(
