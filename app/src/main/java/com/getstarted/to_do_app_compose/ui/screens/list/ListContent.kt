@@ -1,6 +1,11 @@
 package com.getstarted.to_do_app_compose.ui.screens.list
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,7 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissState
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,7 +29,12 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -49,6 +58,8 @@ import com.getstarted.to_do_app_compose.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.getstarted.to_do_app_compose.util.Action
 import com.getstarted.to_do_app_compose.util.RequestState
 import com.getstarted.to_do_app_compose.util.SearchAppBarState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListContent(
@@ -121,6 +132,7 @@ fun HandleListContent(
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayTasks(
@@ -142,7 +154,11 @@ fun DisplayTasks(
             val dismissDirection  =  dismissState.dismissDirection
             val isDismissed = dismissState.isDismissed(DismissDirection.EndToStart)
             if (isDismissed && dismissDirection == DismissDirection.EndToStart){
-                onSwipeToDelete(Action.DELETE,task)
+                val scope = rememberCoroutineScope()
+                scope.launch {
+                    delay(300)
+                    onSwipeToDelete(Action.DELETE,task)
+                }
             }
             val degrees by animateFloatAsState(
                 targetValue = if (dismissState.targetValue == DismissValue.Default)
@@ -150,16 +166,34 @@ fun DisplayTasks(
                 else
                     -45f
             )
-            SwipeToDismiss(
-                state = dismissState,
-                directions = setOf(DismissDirection.EndToStart),
-                background = { RedBackground(degrees = degrees)},
-                dismissContent = {
-                    TaskItem(
-                        toDoTask = task,
-                        navigateToTaskScreen = navigateToTaskScreen
-                    )
-                })
+            var itemAppeared by remember { mutableStateOf(false) }
+            LaunchedEffect(key1 = true){
+                itemAppeared = true
+            }
+          AnimatedVisibility(
+              visible = itemAppeared && !isDismissed,
+              enter = expandVertically(
+                  animationSpec = tween(
+                      durationMillis = 300
+                  )
+              ),
+              exit = shrinkHorizontally(
+                  animationSpec = tween(
+                      durationMillis = 300
+                  )
+              )
+          ) {
+              SwipeToDismiss(
+                  state = dismissState,
+                  directions = setOf(DismissDirection.EndToStart),
+                  background = { RedBackground(degrees = degrees)},
+                  dismissContent = {
+                      TaskItem(
+                          toDoTask = task,
+                          navigateToTaskScreen = navigateToTaskScreen
+                      )
+                  })
+          }
 
         }
     }
@@ -173,13 +207,13 @@ fun RedBackground(degrees:Float)
         .fillMaxSize()
         .background(HighPriorityColor)
         .padding(horizontal = LARGEST_PADDING),
+        contentAlignment = Alignment.CenterEnd
 //        .align(Alignment.CenterEnd)
         ){
         Icon(
             modifier = Modifier
-                .rotate(degrees =degrees)
-                .fillMaxSize(.7f)
-                .align(Alignment.Center),
+                .rotate(degrees = degrees)
+                .fillMaxSize(.5f),
             imageVector = Icons.Filled.Delete,
             contentDescription = stringResource(id = R.string.delete_icon),
             tint = Color.White

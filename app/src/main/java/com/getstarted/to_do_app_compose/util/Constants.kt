@@ -10,7 +10,7 @@ object Constants {
     const val TASK_ARGUMENT_KEY = "taskId"
 
     // navigating  login screen
-    const val LOGIN_SCREEN = "login/{next}"
+    const val LOGIN_SCREEN = "login"
     const val LOGIN_ARGUMENT_KEY = "next"
 
     // max lenght for title
@@ -18,4 +18,8 @@ object Constants {
 
     const val PREFERENCE_NAME ="todo_preferences"
     const val PREFERENCE_KEY="sort_state"
+
+    const val SPLASH_SCREEN ="splash"
+
+    const val SPLASH_SCREEN_DELAY = 3000L
 }

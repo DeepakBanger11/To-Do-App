@@ -2,20 +2,22 @@ package com.getstarted.to_do_app_compose.ui.screens.task
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import com.getstarted.to_do_app_compose.dataClasses.Priority
 import com.getstarted.to_do_app_compose.dataClasses.ToDoTask
-import com.getstarted.to_do_app_compose.ui.theme.LARGE_PADDING
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
 import com.getstarted.to_do_app_compose.util.Action
 
@@ -31,6 +33,9 @@ fun TaskScreen(
     val description: String by sharedViewModel.description
     val priority: Priority by sharedViewModel.priority
     val context = LocalContext.current
+
+    BackHandler(onBackPressed = {navigateToListScreen(Action.NO_ACTION)})
+
     Scaffold(
         topBar = {
             TaskAppBar(
@@ -72,4 +77,29 @@ fun displayToast(context: Context){
     Toast.makeText(context,
         "Fields Empty",
         Toast.LENGTH_SHORT).show()
+}
+@Composable
+fun BackHandler(
+    backInvokedDispatcher: OnBackPressedDispatcher? =
+        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
+    onBackPressed:() -> Unit
+    ){
+    val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
+
+    val  backCallBack = remember{
+        object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                currentOnBackPressed()
+            }
+        }
+    }
+    
+    DisposableEffect(key1 = backInvokedDispatcher){
+        if (backInvokedDispatcher != null) {
+            backInvokedDispatcher.addCallback(backCallBack)
+        }
+        onDispose {
+            backCallBack.remove()
+        }
+    }
 }

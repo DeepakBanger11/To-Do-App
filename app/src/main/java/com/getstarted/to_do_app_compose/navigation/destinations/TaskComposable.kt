@@ -1,6 +1,8 @@
 package com.getstarted.to_do_app_compose.navigation.destinations
 
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,7 +24,13 @@ fun NavGraphBuilder.taskComposable(
         route = TASK_SCREEN,
         arguments = listOf(navArgument(TASK_ARGUMENT_KEY){
             type = NavType.IntType
-        })
+        }),
+        enterTransition = {
+            slideInHorizontally(
+                animationSpec = tween(600),
+                initialOffsetX = {fullWidth ->-fullWidth }
+            )
+        }
     ){navBackStackEntry ->
         val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY,0)
         LaunchedEffect(key1 = taskId){

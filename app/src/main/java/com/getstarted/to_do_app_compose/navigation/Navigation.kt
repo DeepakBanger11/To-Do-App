@@ -7,9 +7,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.getstarted.to_do_app_compose.navigation.destinations.listComposable
 import com.getstarted.to_do_app_compose.navigation.destinations.loginComposable
+import com.getstarted.to_do_app_compose.navigation.destinations.splashComposable
 import com.getstarted.to_do_app_compose.navigation.destinations.taskComposable
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
+import com.getstarted.to_do_app_compose.util.Constants.LIST_SCREEN
 import com.getstarted.to_do_app_compose.util.Constants.LOGIN_SCREEN
+import com.getstarted.to_do_app_compose.util.Constants.SPLASH_SCREEN
 
 @Composable
 fun SetUpNavigation(
@@ -21,17 +24,21 @@ fun SetUpNavigation(
     }
     NavHost(
         navController = navController,
-//        startDestination = LIST_SCREEN
-        startDestination = LOGIN_SCREEN
+        //startDestination = LOGIN_SCREEN
+        startDestination = SPLASH_SCREEN
     ) {
+        splashComposable(
+            navigateToLoginScreen = screen.splash
+        )
+        loginComposable(navigateToListScreen = screen.task)
         listComposable(
-            navigateToTaskScreen = screen.task,
+            navigateToTaskScreen = screen.list,
             sharedViewModal = sharedViewModal
         )
         taskComposable(
             sharedViewModal = sharedViewModal,
-            navigateToListScreen = screen.list
+            navigateToListScreen = screen.task
         )
-        loginComposable(navigateToListScreen = screen.list)
+
     }
 }
