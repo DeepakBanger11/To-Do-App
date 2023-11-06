@@ -55,6 +55,15 @@ class SharedViewModal @Inject constructor(
         MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
     val allTasks: StateFlow<RequestState<List<ToDoTask>>> = _allTasks.asStateFlow()
 
+    private val _sortState =
+        MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
+    val sortState: StateFlow<RequestState<Priority>> = _sortState
+
+    init {
+        getAllTasks()
+        readSortState()
+    }
+
 
     fun searchDatabase(searchQuery: String) {
         _searchedTasks.value = RequestState.Loading
@@ -84,10 +93,8 @@ class SharedViewModal @Inject constructor(
             started = SharingStarted.WhileSubscribed(),
             initialValue = emptyList()
         )
-    private val _sortState =
-        MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
-    val sortState: StateFlow<RequestState<Priority>> = _sortState
-    fun readSortState(){
+
+    private fun readSortState(){
         _sortState .value = RequestState.Loading
         try {
             viewModelScope.launch {
@@ -106,7 +113,7 @@ class SharedViewModal @Inject constructor(
             dataStoreRepository.persistSortState(priority =priority)
         }
     }
-    fun getAllTasks() {
+    private fun getAllTasks() {
         _allTasks.value = RequestState.Loading
         try {
             viewModelScope.launch {
@@ -197,7 +204,6 @@ class SharedViewModal @Inject constructor(
 
             }
         }
-        this.action.value = Action.NO_ACTION
     }
 
     fun updateTaskField(selectedTask: ToDoTask?) {

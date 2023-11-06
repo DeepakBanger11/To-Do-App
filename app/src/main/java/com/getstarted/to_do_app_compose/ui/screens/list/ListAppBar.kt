@@ -66,7 +66,7 @@ fun ListAppBar(
                 onSearchClicked = {
                     sharedViewModal.searchAppBarState.value = SearchAppBarState.OPENED
                 },
-                onSortClicked = {sharedViewModal.persistSortingState(it)},
+                onSortClicked = { sharedViewModal.persistSortingState(it) },
                 onDeleteAllConfirmed = {
                     sharedViewModal.action.value = Action.DELETE_ALL
                 }
@@ -137,44 +137,17 @@ fun SortAction(
         DropdownMenu(
             expanded = expanded, onDismissRequest = { expanded = false })
         {
-            DropdownMenuItem(
-                text = {
-                    PriorityItem(priority = Priority.LOW)
-                },
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.LOW)
-//                    print(PriorityItem(priority = Priority.LOW))
-                }
-            )
-//            DropdownMenuItem(
-//                text = {
-//                    PriorityItem(priority = Priority.MEDIUM)
-//                },
-//                onClick = {
-//                    expanded = false
-//                    onSortClicked(Priority.MEDIUM)
-//                }
-//            )
-
-            DropdownMenuItem(
-                text = {
-                    PriorityItem(priority = Priority.HIGH)
-                },
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.HIGH)
-                }
-            )
-            DropdownMenuItem(
-                text = {
-                    PriorityItem(priority = Priority.NONE)
-                },
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.NONE)
-                }
-            )
+            Priority.values().slice(setOf(0, 2, 3)).forEach { priority ->
+                DropdownMenuItem(
+                    text = {
+                        PriorityItem(priority = priority)
+                    },
+                    onClick = {
+                        expanded = false
+                        onSortClicked(priority)
+                    }
+                )
+            }
         }
     }
 }

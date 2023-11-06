@@ -28,20 +28,21 @@ import com.getstarted.to_do_app_compose.R
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
 import com.getstarted.to_do_app_compose.util.Action
 import com.getstarted.to_do_app_compose.util.SearchAppBarState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
+    action: Action,
     navigateToTaskScreen: (taskId: Int) -> Unit,
     sharedViewModal: SharedViewModal
 ) {
-    LaunchedEffect(key1 = true) {
-        Log.d("ListScreen", "LaunchEffect Triggered!")
-        sharedViewModal.getAllTasks()
-        sharedViewModal.readSortState()
+
+    LaunchedEffect(key1 = action){
+        sharedViewModal.handleDatabaseActions(action = action)
     }
-    val action by sharedViewModal.action
+
 
     //this collect all tasks in data base and also update it whenever there is change in database
     val allTasks by sharedViewModal.allTasks.collectAsState()
@@ -59,7 +60,7 @@ fun ListScreen(
 
     DisplaySnackBar(
         scaffoldState = scaffoldState,
-        handleDatabaseActions = { sharedViewModal.handleDatabaseActions(action = action) },
+        onComplete = { sharedViewModal.action.value = it },
         onUndoClicked = {
             sharedViewModal.action.value = it
         },
@@ -87,6 +88,7 @@ fun ListScreen(
                 onSwipeToDelete ={ action,task ->
                     sharedViewModal.action.value = action
                     sharedViewModal.updateTaskField(selectedTask = task)
+                    scaffoldState.currentSnackbarData?.dismiss()
                 },
                 navigateToTaskScreen = navigateToTaskScreen
             )
@@ -117,12 +119,12 @@ fun ListFab(
 @Composable
 fun DisplaySnackBar(
     scaffoldState: SnackbarHostState,
-    handleDatabaseActions: () -> Unit,
+    onComplete: (Action) -> Unit,
     onUndoClicked: (Action) -> Unit,
     taskTitle: String,
     action: Action
 ) {
-    handleDatabaseActions()
+
 
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = action) {
@@ -138,7 +140,10 @@ fun DisplaySnackBar(
                     onUndoClicked = onUndoClicked
                 )
             }
+            onComplete(Action.NO_ACTION)
         }
+        delay(2000)
+        scaffoldState.currentSnackbarData?.dismiss()
     }
 }
 
