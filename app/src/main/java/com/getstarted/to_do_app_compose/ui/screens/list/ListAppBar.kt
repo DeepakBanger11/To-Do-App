@@ -277,22 +277,6 @@ fun SearchAppBar(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        // this wasn't working properly
-//                        print("$trailingIconState is value")
-//                       when(trailingIconState){
-//                           TrailingIconsState.READY_TO_DELETE ->{
-//                               onTextChange("")
-//                               trailingIconState =TrailingIconsState.READY_TO_CLOSE
-//                           }
-//                           TrailingIconsState.READY_TO_CLOSE ->{
-//                               if (text.isEmpty()){
-//                                   onTextChange("")
-//                               }
-//                               else
-//                                   onCloseClicked()
-//                               trailingIconState = TrailingIconsState.READY_TO_DELETE
-//                           }
-//                       }
                         if (text.isNotEmpty()) {
                             onTextChange("")
                         } else {
