@@ -1,5 +1,6 @@
 package com.getstarted.to_do_app_compose.ui.screens.splash
 
+import android.content.Context
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -33,45 +34,53 @@ import androidx.compose.ui.unit.sp
 import com.getstarted.to_do_app_compose.R
 import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
 import com.getstarted.to_do_app_compose.ui.theme.LOGO_HEIGHT
+import com.getstarted.to_do_app_compose.util.Action
 import com.getstarted.to_do_app_compose.util.Constants.SPLASH_SCREEN_DELAY
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navigateToLoginScreen: ()-> Unit
-){
-    var startAnimation by remember{
+    context: Context,
+    navigateToLoginScreen: () -> Unit,
+    navigateToListScreen: (Action) -> Unit,
+) {
+    var startAnimation by remember {
         mutableStateOf(false)
     }
     val offsetState by animateDpAsState(
-        targetValue = if(startAnimation)0.dp else 200.dp,
+        targetValue = if (startAnimation) 0.dp else 200.dp,
         animationSpec = tween(
             durationMillis = 1000
         )
     )
     val onsetState by animateDpAsState(
-        targetValue = if(startAnimation)0.dp else -200.dp,
+        targetValue = if (startAnimation) 0.dp else -200.dp,
         animationSpec = tween(
             durationMillis = 1000
         )
     )
     val alphaState by animateFloatAsState(
-        targetValue =if(startAnimation)1f else 0f,
+        targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
             durationMillis = 1000
         )
     )
-    LaunchedEffect(key1 = true){
+    val sharedPreferences = context.getSharedPreferences("todo", Context.MODE_PRIVATE)
+    var page = sharedPreferences.getString("whichPage", "")
+    LaunchedEffect(key1 = true) {
         startAnimation = true
         delay(SPLASH_SCREEN_DELAY)
-        navigateToLoginScreen()
+        when (page) {
+            "list/{action}" -> navigateToListScreen(Action.NO_ACTION)
+            else -> navigateToLoginScreen()
+        }
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -82,7 +91,8 @@ fun SplashScreen(
                     .offset(y = onsetState)
                     .alpha(alpha = alphaState),
                 painter = painterResource(id = R.drawable.todo_list),
-                contentDescription = stringResource(id = R.string.to_do_icon))
+                contentDescription = stringResource(id = R.string.to_do_icon)
+            )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 modifier = Modifier
@@ -92,16 +102,15 @@ fun SplashScreen(
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 style = MaterialTheme.typography.titleMedium,
-                text = stringResource(id = R.string.to_do_slogon))
+                text = stringResource(id = R.string.to_do_slogon)
+            )
         }
     }
 }
 
-@Composable
-@Preview
-fun SplashScreenPreview()
-{
-    SplashScreen(
-        navigateToLoginScreen = {}
-    )
-}
+//@Composable
+//@Preview
+//fun SplashScreenPreview()
+//{
+//    SplashScreen {}
+//}

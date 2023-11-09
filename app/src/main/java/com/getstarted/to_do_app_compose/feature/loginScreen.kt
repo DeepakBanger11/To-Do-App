@@ -8,6 +8,7 @@
 package com.getstarted.to_do_app_compose.feature
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,10 +40,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.getstarted.to_do_app_compose.helper.validateRegData
 import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.getstarted.to_do_app_compose.repositories.PreferencesManager
 import com.getstarted.to_do_app_compose.util.Action
 
 @ExperimentalMaterial3Api
@@ -50,9 +53,14 @@ import com.getstarted.to_do_app_compose.util.Action
 fun loginScreen(
     context: Context,
     navigateToListScreen: (Action) -> Unit,
+    navigateToSignUpScreen:() -> Unit
 ) {
-    val sharedPreferences = context.getSharedPreferences("todo",Context.MODE_PRIVATE)
-    var email by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+    var whichPage by remember { mutableStateOf("") }
+    val existingUsername = preferencesManager.getData("username", "default")
+    val existingPassword = preferencesManager.getData("password", "default")
+    var userName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
@@ -87,8 +95,8 @@ fun loginScreen(
                 color = Color.White,
             )
             TextField(
-                value = email,
-                onValueChange = { email = it },
+                value = userName,
+                onValueChange = { userName = it },
                 label = { Text("Enter username") },
                 modifier = Modifier
 //               .background(color = BrandColorPrimary)
@@ -137,19 +145,15 @@ fun loginScreen(
 
             Button(
                 onClick = {
-                    if (!validateRegData(
-                            context,
-                            email,
-                            password)) {
-//                        showToast(
-//                            context, "Registration unsuccessful. Please enter all data."
-//                        )
+                    if (existingUsername.equals(userName) && existingPassword.equals(password) && userName.isNotBlank() && password.isNotBlank()
+                    ) {
+                        preferencesManager.saveData("whichPage","list/{action}")
+                        showToast(context, "Registration successful!")
                         navigateToListScreen(Action.NO_ACTION)
+                    } else if (existingUsername.equals(userName) || existingPassword.equals(password)) {
+                        showToast(context, "User or password isn't correct")
                     } else {
-//                    saveUserData(context, firstName, lastName, email)
-                        //showToast(context, "Registration successful!")
-                        // Navigate to Home screen
-//
+                        showToast(context, "Account doesn't exist, Please sign up")
                     }
                 },
 
@@ -168,7 +172,9 @@ fun loginScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             TextButton(onClick = {
-                showToast(context, "coming soon!")
+                preferencesManager.saveData("whichPage","signup")
+               navigateToSignUpScreen()
+                Log.d("navi","${preferencesManager.getData("whichPage","")}")
             }) {
                 Text(
                     text = "Don't have an account? Sign Up",
@@ -218,96 +224,7 @@ fun headerForLogin() {
     }
 }
 
-@ExperimentalMaterial3Api
-@Composable
-fun inputForLogin(email: String, password: String) {
-    var funEmail = email
-    var funPassword = password
-    val context = LocalContext.current
-//    Column(
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(5.dp)
-//            .clip(
-//                shape = RoundedCornerShape(
-//                    topStart = 40.dp,
-//                    topEnd = 0.dp,
-//                    bottomStart = 0.dp,
-//                    bottomEnd = 40.dp
-//                )
-//            )
-//            .background(color = BrandColorPrimary)
-//            .height(250.dp)
-//    ) {
-//       TextField(
-//           value = email.value, onValueChange ={ email.value = it},
-//           label= { Text( "Enter Email")},
-//           modifier = Modifier
-////               .background(color = BrandColorPrimary)
-//               .clip(shape = RoundedCornerShape(7.dp))
-//       )
-//        Spacer(modifier = Modifier.size(30.dp))
-//        TextField(
-//            value = funPassword, onValueChange ={ funPassword = it},
-//            label= { Text("Enter Password")},
-//            modifier = Modifier
-//                .background(color = BrandColorPrimary)
-//                .clip(shape = RoundedCornerShape(7.dp)),
-//            colors = TextFieldDefaults.textFieldColors(
-//                textColor = Color.Black
-//            )
-//        )
-//    }
-//    Row (
-//        horizontalArrangement = Arrangement.SpaceBetween,
-//        modifier = Modifier.fillMaxWidth().padding(8.dp)
-//    ){
-//
-//        Button(
-//            onClick = {
-//                if (!validateRegData(funEmail,funPassword)) {
-//                    showToast(
-//                        context,
-//                        "Registration unsuccessful. Please enter all data."
-//                    )
-//                    println(funEmail)
-//
-//                } else {
-////                    saveUserData(context, firstName, lastName, email)
-//                    showToast(context, "Registration successful!")
-//                    println(funEmail)
-//                    // Navigate to Home screen
-////                    navController.navigate(com.littlelemon.liitlelemon.Home.route)
-//                }
-//            },
-//
-//            modifier = Modifier
-//                .height(50.dp)
-//                .width(150.dp),
-//            colors = ButtonDefaults.buttonColors(BrandColorPrimary),
-//
-//            ) {
-//            Text(text = "Login", style = TextStyle(fontWeight = FontWeight.Bold))
-//        }
-//        Spacer(modifier = Modifier.size(20.dp))
-//        Button(
-//            onClick = {},
-//
-//            modifier = Modifier
-//                .height(50.dp)
-//                .width(150.dp),
-//            colors = ButtonDefaults.buttonColors(BrandColorPrimary),
-//
-//            ) {
-//            Text(text = "Sign Up", style = TextStyle(fontWeight = FontWeight.Bold))
-//        }
-//
-//    }
-}
 
-
- fun showToast(context: Context, message: String) {
+fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

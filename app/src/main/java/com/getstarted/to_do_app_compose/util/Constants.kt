@@ -21,5 +21,7 @@ object Constants {
 
     const val SPLASH_SCREEN ="splash"
 
+    const val SIGNUP_SCREEN ="signup"
+
     const val SPLASH_SCREEN_DELAY = 3000L
 }

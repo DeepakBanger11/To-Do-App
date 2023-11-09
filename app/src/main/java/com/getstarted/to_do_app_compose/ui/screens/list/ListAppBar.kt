@@ -45,8 +45,10 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.getstarted.to_do_app_compose.feature.DisplayAlertDialog
 import com.getstarted.to_do_app_compose.feature.PriorityItem
+import com.getstarted.to_do_app_compose.repositories.PreferencesManager
 import com.getstarted.to_do_app_compose.ui.theme.LARGE_PADDING
 import com.getstarted.to_do_app_compose.ui.theme.TOP_APP_BAR_HEIGHT
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
@@ -188,9 +190,11 @@ fun SearchAction(
 
 @Composable
 fun DeleteAllAction(
+
     onDeleteAllConfirmed: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var navController = rememberNavController()
     IconButton(onClick = { expanded = true }) {
         Icon(
             painter = painterResource(id = R.drawable.ic_vertical_menu),
@@ -213,6 +217,17 @@ fun DeleteAllAction(
                 onClick = {
                     expanded = false
                     onDeleteAllConfirmed()
+                }
+            )
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = stringResource(id = R.string.sign_out),
+                        modifier = Modifier.padding(start = LARGE_PADDING)
+                    )
+                },
+                onClick = {
+                    expanded = false
                 }
             )
         }
@@ -309,7 +324,6 @@ fun SearchAppBar(
         )
     }
 }
-
 @Composable
 @Preview
 private fun DefaultListAppBarPreview() {
