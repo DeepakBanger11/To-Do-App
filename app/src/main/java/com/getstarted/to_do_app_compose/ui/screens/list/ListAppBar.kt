@@ -7,6 +7,7 @@
 package com.getstarted.to_do_app_compose.ui.screens.list
 
 
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,11 +41,13 @@ import com.getstarted.to_do_app_compose.dataClasses.Priority
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.getstarted.to_do_app_compose.feature.DisplayAlertDialog
 import com.getstarted.to_do_app_compose.feature.PriorityItem
@@ -60,7 +63,8 @@ import com.getstarted.to_do_app_compose.util.SearchAppBarState
 fun ListAppBar(
     sharedViewModal: SharedViewModal,
     searchAppBarState: SearchAppBarState,
-    searchTextState: String
+    searchTextState: String,
+    navController:NavController
 ) {
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> {
@@ -71,7 +75,8 @@ fun ListAppBar(
                 onSortClicked = { sharedViewModal.persistSortingState(it) },
                 onDeleteAllConfirmed = {
                     sharedViewModal.action.value = Action.DELETE_ALL
-                }
+                },
+                navController = navController
             )
         }
 
@@ -99,6 +104,7 @@ fun DefaultListAppBar(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
     onDeleteAllConfirmed: () -> Unit,
+    navController:NavController
 ) {
     TopAppBar(
         title = {
@@ -114,7 +120,8 @@ fun DefaultListAppBar(
             ListAppBarActions(
                 onSearchClicked = onSearchClicked,
                 onSortClicked = onSortClicked,
-                onDeleteAllConfirmed = onDeleteAllConfirmed
+                onDeleteAllConfirmed = onDeleteAllConfirmed,
+                navController = navController
             )
         }
 
@@ -158,8 +165,10 @@ fun SortAction(
 fun ListAppBarActions(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteAllConfirmed: () -> Unit
+    onDeleteAllConfirmed: () -> Unit,
+    navController: NavController
 ) {
+    val context = LocalContext.current
     var openDialog by remember { mutableStateOf(false) }
     DisplayAlertDialog(
         title = stringResource(id = R.string.delete_all_tasks),
@@ -170,9 +179,11 @@ fun ListAppBarActions(
     )
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
-    DeleteAllAction(onDeleteAllConfirmed = {
+    DeleteAllAction(context = context,
+        onDeleteAllConfirmed = {
         openDialog = true
-    })
+    },
+        navController = navController)
 }
 
 @Composable
@@ -190,11 +201,12 @@ fun SearchAction(
 
 @Composable
 fun DeleteAllAction(
-
-    onDeleteAllConfirmed: () -> Unit
+    context: Context,
+    onDeleteAllConfirmed: () -> Unit,
+    navController: NavController
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var navController = rememberNavController()
+    val preferencesManager = remember  { PreferencesManager(context) }
     IconButton(onClick = { expanded = true }) {
         Icon(
             painter = painterResource(id = R.drawable.ic_vertical_menu),
@@ -228,7 +240,15 @@ fun DeleteAllAction(
                 },
                 onClick = {
                     expanded = false
-                }
+                    preferencesManager.clearData()
+                    preferencesManager.saveData("whichPage","login")
+                    navController.navigate(route = "login")
+                    {
+                        popUpTo(navController.graph.startDestinationId){
+                            inclusive = true
+                        }
+                        }
+                    }
             )
         }
     }
@@ -324,15 +344,7 @@ fun SearchAppBar(
         )
     }
 }
-@Composable
-@Preview
-private fun DefaultListAppBarPreview() {
-    DefaultListAppBar(
-        onSearchClicked = {},
-        onSortClicked = {},
-        onDeleteAllConfirmed = {}
-    )
-}
+
 
 @Composable
 @Preview

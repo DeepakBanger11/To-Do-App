@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,11 +31,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.getstarted.to_do_app_compose.R
 import com.getstarted.to_do_app_compose.helper.validateSignUpData
 import com.getstarted.to_do_app_compose.repositories.PreferencesManager
 import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
@@ -48,6 +57,7 @@ fun signUp(
     var password by remember { mutableStateOf("") }
     var userName by remember { mutableStateOf("") }
     var whichPage by remember { mutableStateOf("") }
+    val showPassword = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -106,6 +116,23 @@ fun signUp(
                 modifier = Modifier
                     .background(color = BrandColorPrimary)
                     .clip(shape = RoundedCornerShape(7.dp)),
+                singleLine = true,
+                visualTransformation = if (showPassword.value) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    val image = if (showPassword.value)
+                        R.drawable.visibility_
+                    else R.drawable.visibility_off_24
+
+                    // Localized description for accessibility services
+                    val description =
+                        if (showPassword.value) stringResource(id = R.string.hide_password) else stringResource(
+                            id = R.string.show_password
+                        )
+                    IconButton(onClick = { showPassword.value = !showPassword.value }) {
+                        Icon(painter = painterResource(image), contentDescription = description)
+                    }
+                }
             )
         }
 
@@ -124,20 +151,20 @@ fun signUp(
                             password
                         )
                     ) {
-                        preferencesManager.saveData("username",userName)
-                        preferencesManager.saveData("email",email)
-                        preferencesManager.saveData("password",password)
-                        preferencesManager.saveData("whichPage","login")
+                        preferencesManager.saveData("username", userName)
+                        preferencesManager.saveData("email", email)
+                        preferencesManager.saveData("password", password)
+                        preferencesManager.saveData("whichPage", "login")
 
                         showToast(
-                           context, "Registration successful"
-                       )
-                       navigateToListScreen(Action.NO_ACTION)
+                            context, "Registration successful"
+                        )
+                        navigateToListScreen(Action.NO_ACTION)
                     } else {
-                        preferencesManager.saveData("whichPage","signup")
-                     showToast(
-                          context, "Registration unsuccessful. Please enter all data"
-                      )
+                        preferencesManager.saveData("whichPage", "signup")
+                        showToast(
+                            context, "Registration unsuccessful. Please enter all data"
+                        )
                     }
                 },
 

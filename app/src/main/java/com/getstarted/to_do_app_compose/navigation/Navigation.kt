@@ -20,11 +20,10 @@ fun SetUpNavigation(
     context: Context,
     navController: NavHostController,
     sharedViewModal: SharedViewModal,
-    whichPage:String
 ) {
     val screen = remember(navController) {
         Screens(
-            context =context,
+            context = context,
             navController = navController
         )
     }
@@ -33,9 +32,9 @@ fun SetUpNavigation(
         //startDestination = LOGIN_SCREEN
         startDestination = SPLASH_SCREEN
     ) {
-        val sharedPreferences = context.getSharedPreferences("todo",Context.MODE_PRIVATE)
-        var page = sharedPreferences.getString("whichPage","")
-        Log.d("navi","$page")
+        val sharedPreferences = context.getSharedPreferences("todo", Context.MODE_PRIVATE)
+        var page = sharedPreferences.getString("whichPage", "")
+        Log.d("navi", "$page")
 
         splashComposable(
             navigateToLoginScreen = screen.splash,
@@ -43,11 +42,12 @@ fun SetUpNavigation(
         )
         loginComposable(
             navigateToListScreen = screen.task,
-            navigateToSignUpScreen = screen.splash
+            navController = navController
         )
         listComposable(
             navigateToTaskScreen = screen.list,
-            sharedViewModal = sharedViewModal
+            sharedViewModal = sharedViewModal,
+            navController = navController
         )
         taskComposable(
             sharedViewModal = sharedViewModal,

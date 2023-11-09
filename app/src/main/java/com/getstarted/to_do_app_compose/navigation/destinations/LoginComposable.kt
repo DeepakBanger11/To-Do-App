@@ -4,6 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.getstarted.to_do_app_compose.feature.loginScreen
@@ -13,7 +14,7 @@ import com.getstarted.to_do_app_compose.util.Constants
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.loginComposable(
     navigateToListScreen: (Action) -> Unit,
-    navigateToSignUpScreen: () -> Unit
+    navController:NavController
 ) {
     composable(
         route = Constants.LOGIN_SCREEN,
@@ -29,7 +30,7 @@ fun NavGraphBuilder.loginComposable(
         loginScreen(
             context = context,
             navigateToListScreen = navigateToListScreen,
-            navigateToSignUpScreen = navigateToSignUpScreen
+            navController = navController
         )
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
 import com.getstarted.to_do_app_compose.R
 import com.getstarted.to_do_app_compose.ui.viewmodal.SharedViewModal
 import com.getstarted.to_do_app_compose.util.Action
@@ -35,7 +36,8 @@ import kotlinx.coroutines.launch
 fun ListScreen(
     action: Action,
     navigateToTaskScreen: (taskId: Int) -> Unit,
-    sharedViewModal: SharedViewModal
+    sharedViewModal: SharedViewModal,
+    navController:NavController
 ) {
 
     LaunchedEffect(key1 = action){
@@ -73,7 +75,8 @@ fun ListScreen(
             ListAppBar(
                 sharedViewModal = sharedViewModal,
                 searchAppBarState = searchAppBarState,
-                searchTextState = searchTextState
+                searchTextState = searchTextState,
+                navController = navController
             )
         },
         content = {

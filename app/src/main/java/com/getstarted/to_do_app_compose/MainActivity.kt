@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
                         context = context,
                         navController = navController,
                         sharedViewModal = sharedViewModal,
-                        whichPage = whichPage
                     )
                 }
 

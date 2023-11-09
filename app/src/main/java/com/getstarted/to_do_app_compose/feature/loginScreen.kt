@@ -21,9 +21,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -42,9 +45,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.navigation.NavController
+import com.getstarted.to_do_app_compose.R
 import com.getstarted.to_do_app_compose.repositories.PreferencesManager
 import com.getstarted.to_do_app_compose.util.Action
 
@@ -53,7 +61,7 @@ import com.getstarted.to_do_app_compose.util.Action
 fun loginScreen(
     context: Context,
     navigateToListScreen: (Action) -> Unit,
-    navigateToSignUpScreen:() -> Unit
+    navController: NavController,
 ) {
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
@@ -62,7 +70,7 @@ fun loginScreen(
     val existingPassword = preferencesManager.getData("password", "default")
     var userName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
+    val showPassword = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
@@ -121,9 +129,25 @@ fun loginScreen(
                 modifier = Modifier
                     .background(color = BrandColorPrimary)
                     .clip(shape = RoundedCornerShape(7.dp)),
-//                    colors = TextFieldDefaults.te(
-//                        textColor = Color.Black)
+                singleLine = true,
+                visualTransformation = if (showPassword.value) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    val image = if (showPassword.value)
+                        R.drawable.visibility_
+                    else R.drawable.visibility_off_24
+
+                    // Localized description for accessibility services
+                    val description =
+                        if (showPassword.value) stringResource(id = R.string.hide_password) else stringResource(
+                            id = R.string.show_password
+                        )
+                    IconButton(onClick = { showPassword.value = !showPassword.value }) {
+                        Icon(painter = painterResource(image), contentDescription = description)
+                    }
+                }
             )
+
             TextButton(onClick = { showToast(context, "coming soon!") }) {
                 Text(
                     text = "forgot Password?",
@@ -147,7 +171,7 @@ fun loginScreen(
                 onClick = {
                     if (existingUsername.equals(userName) && existingPassword.equals(password) && userName.isNotBlank() && password.isNotBlank()
                     ) {
-                        preferencesManager.saveData("whichPage","list/{action}")
+                        preferencesManager.saveData("whichPage", "list/{action}")
                         showToast(context, "Registration successful!")
                         navigateToListScreen(Action.NO_ACTION)
                     } else if (existingUsername.equals(userName) || existingPassword.equals(password)) {
@@ -172,9 +196,16 @@ fun loginScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             TextButton(onClick = {
-                preferencesManager.saveData("whichPage","signup")
-               navigateToSignUpScreen()
-                Log.d("navi","${preferencesManager.getData("whichPage","")}")
+                preferencesManager.saveData("whichPage", "signup")
+                navController.navigate(route = "signup")
+                {
+                    popUpTo(navController.graph.startDestinationId) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+                Log.d("navi", "${preferencesManager.getData("whichPage", "")}")
             }) {
                 Text(
                     text = "Don't have an account? Sign Up",

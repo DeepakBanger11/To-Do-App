@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -19,7 +20,8 @@ import com.getstarted.to_do_app_compose.util.toAction
 
 fun NavGraphBuilder.listComposable(
     navigateToTaskScreen: (taskId: Int) -> Unit,
-    sharedViewModal: SharedViewModal
+    sharedViewModal: SharedViewModal,
+    navController:NavController
 ) {
     composable(
         route = LIST_SCREEN,
@@ -44,7 +46,8 @@ fun NavGraphBuilder.listComposable(
         ListScreen(
             action = databaseAction,
             navigateToTaskScreen = navigateToTaskScreen,
-            sharedViewModal = sharedViewModal
+            sharedViewModal = sharedViewModal,
+            navController = navController
         )
     }
 }

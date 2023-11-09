@@ -26,4 +26,6 @@
     <string name="to_do_icon">To Do Icon</string>
     <string name="to_do_slogon">Gateway To Perfection</string>
     <string name="sign_out">Sign Out</string>
+    <string name="hide_password">Hide Password</string>
+    <string name="show_password">Show Password</string>
 </resources>

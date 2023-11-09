@@ -53,7 +53,5 @@ class Screens(context: Context,
             popUpTo(LIST_SCREEN) { inclusive = true }
         }
     }
-    val action: (Int) -> Unit = { action ->
-        navController.navigate("list/{action}")
-    }
+
 }
