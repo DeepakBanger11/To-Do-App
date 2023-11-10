@@ -9,17 +9,17 @@ import com.getstarted.to_do_app_compose.repositories.PreferencesManager
 
 
 
-fun validateSignUpData(
-    userName:String,
-    email: String,
-    password: String): Boolean{
-    var validated = false
-    if(email.isNotBlank() && password.isNotBlank()&& userName.isNotBlank()){
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
-        {
-            validated = true
-        }
-    }
-    return validated
-}
-
+//fun validateSignUpData(
+//    userName:String,
+//    email: String,
+//    password: String): Boolean{
+//    var validated = false
+//    if(email.isNotBlank() && password.isNotBlank()&& userName.isNotBlank()){
+//        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
+//        {
+//            validated = true
+//        }
+//    }
+//    return validated
+//}
+//

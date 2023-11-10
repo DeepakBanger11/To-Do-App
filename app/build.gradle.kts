@@ -64,6 +64,8 @@ dependencies {
 
     // Room components
     implementation("androidx.room:room-runtime:2.6.0")
+    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.12")
     kapt("androidx.room:room-compiler:2.6.0")
     implementation("androidx.room:room-ktx:2.6.0")
 
@@ -83,6 +85,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    testImplementation("com.google.truth:truth:1.1.4")
+    androidTestImplementation("com.google.truth:truth:1.1.4")
     // Compose navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
 

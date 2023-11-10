@@ -42,10 +42,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.getstarted.to_do_app_compose.R
-import com.getstarted.to_do_app_compose.helper.validateSignUpData
 import com.getstarted.to_do_app_compose.repositories.PreferencesManager
 import com.getstarted.to_do_app_compose.ui.theme.BrandColorPrimary
 import com.getstarted.to_do_app_compose.util.Action
+import com.getstarted.to_do_app_compose.util.ValidateSignUp
 
 @Composable
 fun signUp(
@@ -145,7 +145,7 @@ fun signUp(
 
             Button(
                 onClick = {
-                    if (validateSignUpData(
+                    if (ValidateSignUp.validateSignUpData(
                             userName,
                             email,
                             password
@@ -163,7 +163,7 @@ fun signUp(
                     } else {
                         preferencesManager.saveData("whichPage", "signup")
                         showToast(
-                            context, "Registration unsuccessful. Please enter all data"
+                            context, "Registration unsuccessful. Please enter all valid data"
                         )
                     }
                 },

@@ -53,6 +53,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
 import com.getstarted.to_do_app_compose.R
+import com.getstarted.to_do_app_compose.helper.ValidateInput
 import com.getstarted.to_do_app_compose.repositories.PreferencesManager
 import com.getstarted.to_do_app_compose.util.Action
 
@@ -65,12 +66,10 @@ fun loginScreen(
 ) {
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
-    var whichPage by remember { mutableStateOf("") }
-    val existingUsername = preferencesManager.getData("username", "default")
-    val existingPassword = preferencesManager.getData("password", "default")
     var userName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val showPassword = remember { mutableStateOf(false) }
+    val validateInput = ValidateInput()
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
@@ -169,12 +168,11 @@ fun loginScreen(
 
             Button(
                 onClick = {
-                    if (existingUsername.equals(userName) && existingPassword.equals(password) && userName.isNotBlank() && password.isNotBlank()
-                    ) {
+                    if (validateInput.validateLogin(context, userName, password)) {
                         preferencesManager.saveData("whichPage", "list/{action}")
                         showToast(context, "Registration successful!")
                         navigateToListScreen(Action.NO_ACTION)
-                    } else if (existingUsername.equals(userName) || existingPassword.equals(password)) {
+                    } else if (validateInput.validateLoginEntry(context, userName, password)) {
                         showToast(context, "User or password isn't correct")
                     } else {
                         showToast(context, "Account doesn't exist, Please sign up")
