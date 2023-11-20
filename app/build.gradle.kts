@@ -64,8 +64,8 @@ dependencies {
 
     // Room components
     implementation("androidx.room:room-runtime:2.6.0")
-    testImplementation("junit:junit:4.12")
-    testImplementation("junit:junit:4.12")
+    implementation("androidx.test:core-ktx:1.5.0")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     kapt("androidx.room:room-compiler:2.6.0")
     implementation("androidx.room:room-ktx:2.6.0")
 
@@ -77,16 +77,30 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.46")
     //classpath ("com.google.dagger:hilt-android-gradle-plugin: 2.36")
 
-    testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation("com.google.truth:truth:1.1.4")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("app.cash.turbine:turbine:1.0.0")
+    androidTestImplementation("org.mockito:mockito-android:2.12.0")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     testImplementation("com.google.truth:truth:1.1.4")
-    androidTestImplementation("com.google.truth:truth:1.1.4")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.6")
+    testImplementation("org.mockito:mockito-core:2.12.0")
+    testImplementation("org.mockito:mockito-inline:3.7.0")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+
+
+    implementation("junit:junit:4.13.2")
+    implementation("app.cash.turbine:turbine:1.0.0")
     // Compose navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
 

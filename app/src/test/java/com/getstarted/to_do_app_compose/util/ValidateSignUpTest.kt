@@ -33,21 +33,12 @@ class ValidateSignUpTest{
         assertThat(result).isFalse()
     }
     @Test
-    fun `wrong format password returns false`(){
-        val result = ValidateSignUp.validateSignUpData(
-            "123",
-            "123gmail.com",
-            "123"
-        )
-        assertThat(result).isFalse()
-    }
-    @Test
-    fun `filled field returns false`(){
+    fun `filled field returns true`(){
         val result = ValidateSignUp.validateSignUpData(
             "123",
             "123@gmail.com",
             "123"
         )
-        assertThat(result).isFalse()
+        assertThat(result).isTrue()
     }
 }

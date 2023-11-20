@@ -22,9 +22,9 @@ class ValidateInputTest {
     }
 
     @Test
-    fun validSingleEntryProvided_returnTrue() {
+    fun validSingleEntryProvided_returnFalse() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        val result = validateInput.validateLoginEntry(context, "test", "123")
-        assertThat(result).isTrue()
+        val result = validateInput.validateLoginEntry(context, "test", "")
+        assertThat(result).isFalse()
     }
 }

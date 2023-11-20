@@ -6,7 +6,8 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-@ViewModelScoped //Scope annotation for bindings that should exist for the life of a a single ViewModel.
+@ViewModelScoped
+open //Scope annotation for bindings that should exist for the life of a a single ViewModel.
 class ToDoRepository @Inject constructor(private val toDoDao: ToDoDao) {
     val getAllTask: Flow<List<ToDoTask>> = toDoDao.getAllTasks()
     val sortByLowPriority: Flow<List<ToDoTask>> = toDoDao.sortByLowPriorty()
